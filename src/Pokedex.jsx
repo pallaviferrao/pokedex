@@ -37,41 +37,50 @@ const Pokedex = () => {
       game: "red",
     },
   });
+  //   useEffect(() => {
+  //     let chooseThree = [];
+  //     let abc = [];
+  //     for (let i = 0; i < 5; i++) {
+  //       chooseThree[i] = Math.floor(Math.random() * 1000);
+  //       abc[i] = pokemonMoves[chooseThree[i]];
+  //     }
+  //     setCardPerson(abc);
+  //   }, [pokemonMoves]);
   useEffect(() => {
-    let chooseThree = [];
-    let abc = [];
-    for (let i = 0; i < 5; i++) {
-      chooseThree[i] = Math.floor(Math.random() * 1000);
-      abc[i] = pokemonMoves[chooseThree[i]];
+    if (data) {
+      pokemonMoves = data.allPokemon.reduce((agg, pokemon) => {
+        if (pokemon.moves.length === 0) {
+          return agg;
+        }
+        let moves = pokemon.moves.filter((poke) => {
+          return (
+            poke.power !== null &&
+            poke.power !== undefined &&
+            poke.power !== "undefined" &&
+            typeof poke.power !== "undefined"
+          );
+        });
+        moves.forEach((element) => {
+          let poke = {
+            image: pokemon.sprites.front_default,
+            pokename: pokemon.name,
+            moves: element,
+          };
+          agg = [...agg, poke];
+        });
+        return agg;
+      }, []);
+      let chooseThree = [];
+      let abc = [];
+      for (let i = 0; i < 5; i++) {
+        chooseThree[i] = Math.floor(Math.random() * 1000);
+        abc[i] = pokemonMoves[chooseThree[i]];
+      }
+      setCardPerson(abc);
     }
-    setCardPerson(abc);
-  }, [pokemonMoves]);
+  }, [data]);
   if (loading) return "Loading...";
   if (error) return <pre>{error.message}</pre>;
-  if (data && pokemonMoves.length <= 0) {
-    pokemonMoves = data.allPokemon.reduce((agg, pokemon) => {
-      if (pokemon.moves.length === 0) {
-        return agg;
-      }
-      let moves = pokemon.moves.filter((poke) => {
-        return (
-          poke.power !== null &&
-          poke.power !== undefined &&
-          poke.power !== "undefined" &&
-          typeof poke.power !== "undefined"
-        );
-      });
-      moves.forEach((element) => {
-        let poke = {
-          image: pokemon.sprites.front_default,
-          pokename: pokemon.name,
-          moves: element,
-        };
-        agg = [...agg, poke];
-      });
-      return agg;
-    }, []);
-  }
   const handleShowCard = () => {
     let rand = Math.floor(Math.random() * 1000);
     let card = pokemonMoves[rand];
@@ -112,24 +121,25 @@ const Pokedex = () => {
       <h4>Computer Score {compScore}</h4>
       <h4>{winState}</h4>
       <div className="deck">
-        {cardPerson.map((pokemon, ind) => {
-          return (
-            <div>
-              {pokemon && pokemon.image && (
-                <Card
-                  image={pokemon.image}
-                  name={pokemon.pokename}
-                  move={pokemon.moves.name}
-                  power={pokemon.moves.power}
-                  ind={ind}
-                  onClick={() => {
-                    handleClickCard(ind);
-                  }}
-                ></Card>
-              )}
-            </div>
-          );
-        })}
+        {cardPerson.length > 0 &&
+          cardPerson.map((pokemon, ind) => {
+            return (
+              <div>
+                {
+                  <Card
+                    image={pokemon.image}
+                    name={pokemon.pokename}
+                    move={pokemon.moves.name}
+                    power={pokemon.moves.power}
+                    ind={ind}
+                    onClick={() => {
+                      handleClickCard(ind);
+                    }}
+                  ></Card>
+                }
+              </div>
+            );
+          })}
       </div>
       <div className="deck">
         {compCard && compCard.image && (
