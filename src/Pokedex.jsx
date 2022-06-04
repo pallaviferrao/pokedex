@@ -73,7 +73,7 @@ const Pokedex = () => {
       let chooseThree = [];
       let abc = [];
       for (let i = 0; i < 5; i++) {
-        chooseThree[i] = Math.floor(Math.random() * 1000);
+        chooseThree[i] = Math.floor(Math.random() * 2000);
         abc[i] = pokemonMoves[chooseThree[i]];
       }
       setCardPerson(abc);
@@ -82,7 +82,7 @@ const Pokedex = () => {
   if (loading) return "Loading...";
   if (error) return <pre>{error.message}</pre>;
   const handleShowCard = () => {
-    let rand = Math.floor(Math.random() * 1000);
+    let rand = Math.floor(Math.random() * 2000);
     let card = pokemonMoves[rand];
     setCompCard(card);
   };
