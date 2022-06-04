@@ -11,3 +11,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.deck{
+  margin: 1rem;
+  display: flex;
+ direction: row;
+ gap: 1rem;
+}
+.card{
+
+ border: 1px solid black;
+ width: 10rem
+}
+.pokeGame{
+  margin:2rem
+}
