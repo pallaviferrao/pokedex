@@ -37,15 +37,6 @@ const Pokedex = () => {
       game: "red",
     },
   });
-  //   useEffect(() => {
-  //     let chooseThree = [];
-  //     let abc = [];
-  //     for (let i = 0; i < 5; i++) {
-  //       chooseThree[i] = Math.floor(Math.random() * 1000);
-  //       abc[i] = pokemonMoves[chooseThree[i]];
-  //     }
-  //     setCardPerson(abc);
-  //   }, [pokemonMoves]);
   useEffect(() => {
     if (data) {
       pokemonMoves = data.allPokemon.reduce((agg, pokemon) => {
@@ -82,9 +73,11 @@ const Pokedex = () => {
   if (loading) return "Loading...";
   if (error) return <pre>{error.message}</pre>;
   const handleShowCard = () => {
-    let rand = Math.floor(Math.random() * 2000);
-    let card = pokemonMoves[rand];
-    setCompCard(card);
+    if (Object.keys(compCard).length === 0 && cardPerson.length > 0) {
+      let rand = Math.floor(Math.random() * 2000);
+      let card = pokemonMoves[rand];
+      setCompCard(card);
+    }
   };
   const handleClickCard = (ind) => {
     let power = cardPerson[ind].moves.power;
@@ -105,7 +98,7 @@ const Pokedex = () => {
     if (arr.length === 0) {
       if (personScore > compScore) {
         setWinState("YOU WON!!!!");
-      } else if (personScore > compScore) {
+      } else if (personScore < compScore) {
         setWinState("You Lost!");
       } else {
         setWinState("It's a draw");
@@ -117,14 +110,32 @@ const Pokedex = () => {
   return (
     <div className="pokeGame">
       <h1>Poke Dex Game</h1>
-      <h4>Person Score {personScore}</h4>
-      <h4>Computer Score {compScore}</h4>
+      <p>
+        Person Score {personScore} / Computer Score {compScore}
+      </p>
+      <p>Click on show card for Computer to play it's game</p>
       <h4>{winState}</h4>
+      <div className="deck">
+        <div className="deckGame">
+          {compCard && compCard.image && (
+            <Card
+              image={compCard.image}
+              name={compCard.pokename}
+              move={compCard.moves.name}
+              ind={-1}
+              power={compCard.moves.power}
+              onClick={() => {
+                doNothing();
+              }}
+            ></Card>
+          )}
+        </div>
+      </div>
       <div className="deck">
         {cardPerson.length > 0 &&
           cardPerson.map((pokemon, ind) => {
             return (
-              <div>
+              <div class="deckGame">
                 {
                   <Card
                     image={pokemon.image}
@@ -141,23 +152,10 @@ const Pokedex = () => {
             );
           })}
       </div>
-      <div className="deck">
-        {compCard && compCard.image && (
-          <Card
-            image={compCard.image}
-            name={compCard.pokename}
-            move={compCard.moves.name}
-            ind={-1}
-            power={compCard.moves.power}
-            onClick={() => {
-              doNothing();
-            }}
-          ></Card>
-        )}
-      </div>
+
       <div>
         <button
-          className="deck"
+          className="showCard"
           onClick={() => {
             handleShowCard();
           }}

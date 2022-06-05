@@ -1,15 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@100;200&family=Press+Start+2P&family=Tangerine&display=swap');
 body {
   margin: 0;
+  width:100%;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+.deckGame{
+  margin: auto;
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+h1{
+  font-family: 'Press Start 2P', cursive;
 }
 .deck{
   margin: 1rem;
@@ -17,10 +24,26 @@ code {
  direction: row;
  gap: 1rem;
 }
+.red{
+  background-color: red;
+}
 .card{
 
- border: 1px solid black;
+ border: 2px solid black;
  width: 10rem
+}
+.card:hover{
+  cursor: pointer;
+}
+.showCard{
+  background-color: red; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
 }
 .pokeGame{
   margin:2rem

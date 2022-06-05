@@ -9,9 +9,12 @@ const Card = ({ image, name, move, power, ind, onClick }) => {
       }}
     >
       <h2>{name}</h2>
+
       <img src={image}></img>
-      <h3>{move}</h3>
-      <h3>{power}</h3>
+      <div className="red">
+        <h3>{move}</h3>
+        <h3>{power}</h3>
+      </div>
     </div>
   );
 };
