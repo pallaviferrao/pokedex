@@ -10,7 +10,7 @@ const Card = ({ image, name, move, power, ind, onClick }) => {
     >
       <h2>{name}</h2>
 
-      <img src={image}></img>
+      <img className="Image" src={image}></img>
       <div className="red">
         <h3>{move}</h3>
         <h3>{power}</h3>
