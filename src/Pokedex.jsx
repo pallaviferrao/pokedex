@@ -109,7 +109,7 @@ const Pokedex = () => {
   const doNothing = () => {};
   return (
     <div className="pokeGame">
-      <h1>Poke Dex Game</h1>
+      <h1 className="pokeGameName">Poke Dex Game</h1>
       <p>
         Person Score {personScore} / Computer Score {compScore}
       </p>
@@ -163,6 +163,14 @@ const Pokedex = () => {
           Show Card
         </button>
       </div>
+      <button
+        className="showCard"
+        onClick={() => {
+          window.location.reload(false);
+        }}
+      >
+        Play Again
+      </button>
     </div>
   );
 };

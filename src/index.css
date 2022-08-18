@@ -8,8 +8,15 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+p{
+  color: white;
+}
 .deckGame{
   margin: auto;
+}
+.pokeGame{
+  padding: 3em;
+  background-color: black;
 }
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
@@ -17,6 +24,7 @@ code {
 }
 h1{
   font-family: 'Press Start 2P', cursive;
+  color: crimson;
 }
 .deck{
   margin: 1rem;
@@ -28,7 +36,7 @@ h1{
   background-color: red;
 }
 .card{
-
+background-color: white;
  border: 2px solid black;
  width: 10rem
 }
@@ -67,7 +75,9 @@ h1{
     height: 7rem
    }
 }
-
+h4{
+  color: white;
+}
 @media (max-width: 400px) {
   .deck{
     margin: 1rem;
@@ -98,4 +108,5 @@ h1{
     width: 3rem;
     height: 5rem
    }
+
 }
