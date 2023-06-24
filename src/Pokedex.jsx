@@ -5,7 +5,9 @@ import "./index.css";
 let pokemonMoves = [];
 let personScore = 0;
 let compScore = 0;
-const FILMS_QUERY = gql`
+let showCardAllowed = 1;
+let clickCardAllowed = 0;
+let FILMS_QUERY = gql`
   query pokemons($limit: Int, $offset: Int) {
     pokemons(limit: $limit, offset: $offset) {
       results {
@@ -40,7 +42,7 @@ const Pokedex = () => {
           image: pokemon.image,
           pokename: pokemon.name,
           moves: movesList[ind % movesList.length],
-          power: Math.floor(Math.random() * 100),
+          power: Math.floor(Math.random() * 1000),
         };
         agg = [...agg, poke];
         return agg;
@@ -63,16 +65,35 @@ const Pokedex = () => {
   };
 
   const handleShowCard = () => {
+    if (showCardAllowed === 0) {
+      return;
+    }
     if (Object.keys(compCard).length === 0 && cardPerson.length > 0) {
       let rand = Math.floor(Math.random() * 100);
       let card = pokemonMoves[rand];
       setCompCard(card);
     }
+    clickCardValue(1, 0);
   };
 
   const handleClickCard = (ind) => {
+    if (clickCardAllowed === 0) {
+      return;
+    }
     let power = cardPerson[ind].power;
     let compPower = compCard.power;
+    [personScore, compScore] = score(power, compPower, personScore, compScore);
+    setCompCard({});
+    let arr = [...cardPerson];
+    arr.splice(ind, 1);
+    if (arr.length === 0) {
+      chooseWinner(personScore, compScore);
+    }
+    setCardPerson(arr);
+    clickCardValue(0, 1);
+  };
+
+  const score = (power, compPower, personScore, compScore) => {
     if (power > compPower) {
       personScore++;
     } else if (compPower > power) {
@@ -81,13 +102,12 @@ const Pokedex = () => {
       personScore++;
       compScore++;
     }
-    setCompCard({});
-    let arr = [...cardPerson];
-    arr.splice(ind, 1);
-    if (arr.length === 0) {
-      chooseWinner(personScore, compScore);
-    }
-    setCardPerson(arr);
+    return [personScore, compScore];
+  };
+
+  const clickCardValue = (clickCardAllowedVal, showCardAllowedVal) => {
+    clickCardAllowed = clickCardAllowedVal;
+    showCardAllowed = showCardAllowedVal;
   };
 
   const chooseWinner = (personScore, compScore) => {
