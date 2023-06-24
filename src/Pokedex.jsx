@@ -6,65 +6,49 @@ let pokemonMoves = [];
 let personScore = 0;
 let compScore = 0;
 const FILMS_QUERY = gql`
-  query ($game: String!) {
-    allPokemon {
-      name
-      sprites {
-        front_default
-      }
-      id
-      abilities {
-        id
-        effect
-      }
-      moves(game: $game) {
-        id
+  query pokemons($limit: Int, $offset: Int) {
+    pokemons(limit: $limit, offset: $offset) {
+      results {
         name
-        power
-        effect
-        damage_class
+        image
       }
     }
   }
 `;
 const Pokedex = () => {
-  let youCards = [];
   const [cardPerson, setCardPerson] = useState([]);
   const [compCard, setCompCard] = useState({});
   const [winState, setWinState] = useState("");
   const { data, loading, error } = useQuery(FILMS_QUERY, {
     variables: {
-      game: "red",
+      limit: 100,
     },
   });
   useEffect(() => {
     if (data) {
-      pokemonMoves = data.allPokemon.reduce((agg, pokemon) => {
-        if (pokemon.moves.length === 0) {
-          return agg;
-        }
-        let moves = pokemon.moves.filter((poke) => {
-          return (
-            poke.power !== null &&
-            poke.power !== undefined &&
-            poke.power !== "undefined" &&
-            typeof poke.power !== "undefined"
-          );
-        });
-        moves.forEach((element) => {
-          let poke = {
-            image: pokemon.sprites.front_default,
-            pokename: pokemon.name,
-            moves: element,
-          };
-          agg = [...agg, poke];
-        });
+      pokemonMoves = data.pokemons.results.reduce((agg, pokemon, ind) => {
+        let movesList = [
+          "fire",
+          "punch",
+          "water",
+          "sing",
+          "electricity",
+          "hypnotise",
+        ];
+        let poke = {
+          image: pokemon.image,
+          pokename: pokemon.name,
+          moves: movesList[ind % movesList.length],
+          power: Math.floor(Math.random() * 100),
+        };
+        agg = [...agg, poke];
         return agg;
       }, []);
       let chooseThree = [];
       let abc = [];
       for (let i = 0; i < 5; i++) {
-        chooseThree[i] = Math.floor(Math.random() * 2000);
+        console.log(pokemonMoves);
+        chooseThree[i] = Math.floor(Math.random() * 100);
         abc[i] = pokemonMoves[chooseThree[i]];
       }
       setCardPerson(abc);
@@ -74,14 +58,14 @@ const Pokedex = () => {
   if (error) return <pre>{error.message}</pre>;
   const handleShowCard = () => {
     if (Object.keys(compCard).length === 0 && cardPerson.length > 0) {
-      let rand = Math.floor(Math.random() * 2000);
+      let rand = Math.floor(Math.random() * 100);
       let card = pokemonMoves[rand];
       setCompCard(card);
     }
   };
   const handleClickCard = (ind) => {
-    let power = cardPerson[ind].moves.power;
-    let compPower = compCard.moves.power;
+    let power = cardPerson[ind].power;
+    let compPower = compCard.power;
     if (power > compPower) {
       personScore++;
     } else if (compPower > power) {
@@ -121,9 +105,9 @@ const Pokedex = () => {
             <Card
               image={compCard.image}
               name={compCard.pokename}
-              move={compCard.moves.name}
+              move={compCard.moves}
               ind={-1}
-              power={compCard.moves.power}
+              power={compCard.power}
               onClick={() => {
                 doNothing();
               }}
@@ -140,8 +124,8 @@ const Pokedex = () => {
                   <Card
                     image={pokemon.image}
                     name={pokemon.pokename}
-                    move={pokemon.moves.name}
-                    power={pokemon.moves.power}
+                    move={pokemon.moves}
+                    power={pokemon.power}
                     ind={ind}
                     onClick={() => {
                       handleClickCard(ind);

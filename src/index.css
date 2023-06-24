@@ -26,6 +26,19 @@ h1{
   font-family: 'Press Start 2P', cursive;
   color: crimson;
 }
+h2 {
+
+  font-family: "Raleway", sans-serif;
+
+}
+
+h3 {
+  
+  font-family: "Raleway", sans-serif;
+  font-weight: 300;
+
+
+}
 .deck{
   margin: 1rem;
   display: flex;

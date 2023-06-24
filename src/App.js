@@ -3,7 +3,7 @@ import "./App.css";
 import Pokedex from "./Pokedex.jsx";
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 const client = new ApolloClient({
-  uri: "https://dex-server.herokuapp.com/",
+  uri: "https://graphql-pokeapi.vercel.app/api/graphql",
   cache: new InMemoryCache(),
 });
 function App() {
