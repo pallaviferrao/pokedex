@@ -15,6 +15,7 @@ const FILMS_QUERY = gql`
     }
   }
 `;
+
 const Pokedex = () => {
   const [cardPerson, setCardPerson] = useState([]);
   const [compCard, setCompCard] = useState({});
@@ -24,17 +25,17 @@ const Pokedex = () => {
       limit: 100,
     },
   });
+  let movesList = [
+    "fire",
+    "punch",
+    "water",
+    "sing",
+    "electricity",
+    "hypnotise",
+  ];
   useEffect(() => {
     if (data) {
       pokemonMoves = data.pokemons.results.reduce((agg, pokemon, ind) => {
-        let movesList = [
-          "fire",
-          "punch",
-          "water",
-          "sing",
-          "electricity",
-          "hypnotise",
-        ];
         let poke = {
           image: pokemon.image,
           pokename: pokemon.name,
@@ -44,18 +45,23 @@ const Pokedex = () => {
         agg = [...agg, poke];
         return agg;
       }, []);
-      let chooseThree = [];
-      let abc = [];
-      for (let i = 0; i < 5; i++) {
-        console.log(pokemonMoves);
-        chooseThree[i] = Math.floor(Math.random() * 100);
-        abc[i] = pokemonMoves[chooseThree[i]];
-      }
-      setCardPerson(abc);
+      choosePokemons(pokemonMoves);
     }
   }, [data]);
   if (loading) return "Loading...";
   if (error) return <pre>{error.message}</pre>;
+
+  const choosePokemons = (pokemonMoves) => {
+    let chooseRandom = [];
+    let abc = [];
+    for (let i = 0; i < 5; i++) {
+      console.log(pokemonMoves);
+      chooseRandom[i] = Math.floor(Math.random() * 100);
+      abc[i] = pokemonMoves[chooseRandom[i]];
+    }
+    setCardPerson(abc);
+  };
+
   const handleShowCard = () => {
     if (Object.keys(compCard).length === 0 && cardPerson.length > 0) {
       let rand = Math.floor(Math.random() * 100);
@@ -63,6 +69,7 @@ const Pokedex = () => {
       setCompCard(card);
     }
   };
+
   const handleClickCard = (ind) => {
     let power = cardPerson[ind].power;
     let compPower = compCard.power;
@@ -74,21 +81,23 @@ const Pokedex = () => {
       personScore++;
       compScore++;
     }
-
     setCompCard({});
     let arr = [...cardPerson];
-
     arr.splice(ind, 1);
     if (arr.length === 0) {
-      if (personScore > compScore) {
-        setWinState("YOU WON!!!!");
-      } else if (personScore < compScore) {
-        setWinState("You Lost!");
-      } else {
-        setWinState("It's a draw");
-      }
+      chooseWinner(personScore, compScore);
     }
     setCardPerson(arr);
+  };
+
+  const chooseWinner = (personScore, compScore) => {
+    if (personScore > compScore) {
+      setWinState("YOU WON!!!!");
+    } else if (personScore < compScore) {
+      setWinState("You Lost!");
+    } else {
+      setWinState("It's a draw");
+    }
   };
   const doNothing = () => {};
   return (

@@ -1,11 +1,11 @@
 import React from "react";
 
-const Card = ({ image, name, move, power, ind, onClick }) => {
+const Card = ({ image, name, move, power, index, onClick }) => {
   return (
     <div
       className="card"
       onClick={() => {
-        onClick(ind);
+        onClick(index);
       }}
     >
       <h2>{name}</h2>
